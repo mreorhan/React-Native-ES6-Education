@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Button, Alert, ScrollView } from 'react-native';
 import { Constants } from 'expo';
-import { TextInput, IconButton, Text } from 'react-native-paper';
-import { fetchData } from '../utils/functions';
+import { TextInput, Avatar, Text } from 'react-native-paper';
+import { fetchData2, fetchDataWithCallback } from '../utils/functions';
 
 export default class Fetch extends Component {
     static navigationOptions = {
@@ -12,25 +12,26 @@ export default class Fetch extends Component {
         super(props)
         this.state = {
             data: null,
-            count: 0
         }
-        fetchData("https://jsonplaceholder.typicode.com/users",(data)=>this.setState({data}));
     }
-    
+    async componentDidMount(){
+        //fetchDataWithCallback("https://jsonplaceholder.typicode.com/userse",(data)=>this.setState({data}))
+        
+      const data= await fetchData2("https://reqres.in/api/users?page=1&per_page=10");
+       this.setState({data});
+    }
     render() {
-        const { data, count } = this.state;
-        setTimeout(() => {
-            this.setState((state) => ({ count: state.count + 1 }))
-        }, 1000)
+        const { data } = this.state;
+        const paddingSmall = {padding:10}
+        const row = {flexDirection:'row'}
         return (
 
             <ScrollView>
                 <View style={styles.container}>
-                    <Text>{count}sn geçti</Text>
-                    {data ? data.map((i) =>
-                        <View key={i.id}>
-                            <Text>{i.name}</Text>
-                            <Text>{i.email}</Text>
+                    {data ? data.data.map((i) =>
+                        <View key={i.id} style={[paddingSmall,row]}>
+                        <Avatar.Image size={40} source={{uri:i.avatar}} />
+                            <Text style={paddingSmall}>{i.first_name + " "+i.last_name}</Text>
                             <Text>{`
                             `}</Text>
                         </View>
@@ -44,9 +45,7 @@ export default class Fetch extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         width: "100%",
-        marginTop: Constants.statusBarHeight,
         backgroundColor: '#fff',
         justifyContent: 'flex-start',
     },
@@ -55,10 +54,5 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         alignSelf: 'flex-start',
 
-    },
-    listText: {
-        fontSize: 18,
-        padding: 10,
-        width: '90%'
     }
 });

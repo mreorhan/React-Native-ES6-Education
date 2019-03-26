@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, Alert,ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Constants } from 'expo';
-import { TextInput, IconButton, Text } from 'react-native-paper';
+import { TextInput, IconButton, Text, Button } from 'react-native-paper';
 
 export default class Landing extends Component {
     // Header Başlığı belirlemek için;
-    static navigationOptions={
-        title:'Home'
+    static navigationOptions = {
+        title: 'Home'
     }
     constructor(props) {
         super(props)
@@ -22,7 +22,7 @@ export default class Landing extends Component {
 
         const list = this.state.list;
         list.push({ item: data, id: random })
-        this.setState({ list,text:'' })
+        this.setState({ list, text: '' })
         console.log(JSON.stringify(this.state.list))
     }
     removeToList = id => {
@@ -49,22 +49,24 @@ export default class Landing extends Component {
         })
 
         return (
-            
+
             <ScrollView>
-            <View style={styles.container}>
-                <TextInput
-                value={this.state.text}
-                style={{ width: "100%" }} 
-            label="Todo" onChangeText={(text) => this.setState({ text })}
-            onSubmitEditing={()=>this.addtoList(text)}
-            blurOnSubmit={false}
-            />
-                <Button onPress={() => this.addtoList(text)} title="Ekle"></Button>
-                {showList}
-                
-                <Button onPress={()=>this.props.navigation.navigate('Fetch')} title="Go to fetch page"></Button>
-            </View>
-                </ScrollView>
+                <View style={styles.container}>
+                    <TextInput
+                        value={this.state.text}
+                        style={{ width: "100%", marginBottom: 10 }}
+                        label="Todo" onChangeText={(text) => this.setState({ text })}
+                        onSubmitEditing={() => this.addtoList(text)}
+                        blurOnSubmit={false}
+                    />
+                    <Button theme={{ colors: { text: '#fff' } }} mode="contained" onPress={() => this.addtoList(text)}><Text>Ekle</Text></Button>
+                    {showList}
+
+                    <Button theme={{ colors: { text: '#fff' } }} mode="contained" onPress={() => this.props.navigation.navigate('Fetch')}><Text>Go to fetch page</Text></Button>
+                    <Button theme={{ colors: { text: '#fff' } }} mode="contained" onPress={() => this.props.navigation.navigate('Count')}><Text>Go to count page</Text></Button>
+
+                </View>
+            </ScrollView>
         );
     }
 }
@@ -74,7 +76,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         width: "100%",
-        marginTop: Constants.statusBarHeight,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -82,12 +83,12 @@ const styles = StyleSheet.create({
     list: {
         flexDirection: 'row',
         alignItems: 'flex-start',
-        alignSelf:'flex-start',
-        
+        alignSelf: 'flex-start',
+
     },
     listText: {
         fontSize: 18,
         padding: 10,
-        width:'90%'
+        width: '90%'
     }
 });
